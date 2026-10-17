@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Sistema de catálogo, altas de libros y clientes, ventas e historial de la Librería El Estante. Trabajo práctico integrador de Programación III (UTN).">
+  <title>Librería El Estante | Programación III — TPI</title>
+
+  <link rel="stylesheet" href="css/styles.css">
+  <script src="js/app.js" defer></script>
+</head>
+
+<body>
+  <!-- Enlace de salto para navegación con teclado (accesibilidad WAI) -->
+  <a class="enlace-saltar" href="#contenido-principal">Saltar al contenido principal</a>
+
+  <header class="encabezado-sitio">
+    <h1>Librería El Estante</h1>
+    <nav aria-label="Navegación principal">
+      <ul class="menu-principal">
+        <li><a href="#vista-catalogo" aria-current="page">Catálogo</a></li>
+        <li><a href="#vista-libros">Libros</a></li>
+        <li><a href="#vista-clientes">Clientes</a></li>
+        <li><a href="#vista-ventas">Ventas</a></li>
+        <li><a href="#vista-historial">Historial</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- Las cinco vistas navegables viven dentro de un único elemento main. -->
+  <main id="contenido-principal">
+
+    <!-- ==================== VISTA 1: CATÁLOGO ==================== -->
+    <section id="vista-catalogo" class="vista" aria-labelledby="titulo-vista-catalogo">
+      <h2 id="titulo-vista-catalogo">Catálogo</h2>
+
+      <form id="form-buscar-catalogo" role="search" action="#" method="get">
+        <fieldset>
+          <legend>Buscar por título</legend>
+          <label for="catalogo-busqueda">Título del libro</label>
+          <input type="search" id="catalogo-busqueda" name="q" placeholder="Ej.: Crónica del fuego" autocomplete="off">
+          <button type="submit">Buscar</button>
+        </fieldset>
+      </form>
+
+      <!-- Feedback del buscador: lista de resultados / estado de la búsqueda -->
+      <p id="feedback-catalogo" class="mensaje" role="status" aria-live="polite"></p>
+
+      <section id="catalogo-lista" class="listado-tarjetas" aria-label="Libros del catálogo">
+
+        <!-- Estados borde del catálogo (los gestiona JavaScript) -->
+        <p id="catalogo-vacio" class="estado-vacio" role="status" hidden>El catálogo todavía no tiene libros cargados.</p>
+        <p id="catalogo-sin-resultados" class="estado-vacio" role="status" hidden>No se encontraron libros que coincidan con el título buscado.</p>
+
+        <article class="tarjeta-libro" data-libro-id="1">
+          <h3>El umbral de la tormenta</h3>
+          <p><strong>ISBN:</strong> 978-84-01-00011-1</p>
+          <p><strong>Editorial:</strong> Planeta</p>
+          <p><strong>Género:</strong> Fantasía</p>
+          <p><strong>Autores:</strong> Ana Gómez</p>
+          <p><strong>Precio:</strong> $2500.00</p>
+        </article>
+
+        <!-- Caso límite 1: libro sin género asignado -->
+        <article class="tarjeta-libro" data-libro-id="2">
+          <h3>Crónica del fuego</h3>
+          <p><strong>ISBN:</strong> 978-987-566-001-7</p>
+          <p><strong>Editorial:</strong> Editorial Sudamericana</p>
+          <p><strong>Género:</strong> «Sin clasificar»</p>
+          <p><strong>Autores:</strong> Carlos Ruiz</p>
+          <p><strong>Precio:</strong> $1500.00</p>
+        </article>
+
+        <!-- Caso límite 2: libro con dos autores (relación N a M) -->
+        <article class="tarjeta-libro" data-libro-id="3">
+          <h3>Sombras de Buenos Aires</h3>
+          <p><strong>ISBN:</strong> 978-987-1234-56-7</p>
+          <p><strong>Editorial:</strong> Planeta</p>
+          <p><strong>Género:</strong> Policial</p>
+          <p><strong>Autores:</strong> Ana Gómez, Carlos Ruiz</p>
+          <p><strong>Precio:</strong> $2000.00</p>
+        </article>
+
+        <article class="tarjeta-libro" data-libro-id="4">
+          <h3>Introducción a la lógica</h3>
+          <p><strong>ISBN:</strong> 978-84-415-3001-4</p>
+          <p><strong>Editorial:</strong> Editorial Sudamericana</p>
+          <p><strong>Género:</strong> Ciencia</p>
+          <p><strong>Autores:</strong> María López</p>
+          <p><strong>Precio:</strong> $3200.50</p>
+        </article>
+
+        <article class="tarjeta-libro" data-libro-id="5">
+          <p class="etiqueta"><mark>Novedad</mark></p>
+          <h3>Algoritmos y estructuras de datos</h3>
+          <p><strong>ISBN:</strong> 978-950-07-2001-3</p>
+          <p><strong>Editorial:</strong> Planeta</p>
+          <p><strong>Género:</strong> Informática</p>
+          <p><strong>Autores:</strong> María López, Carlos Ruiz</p>
+          <p><strong>Precio:</strong> $4500.00</p>
+        </article>
+
+        <article class="tarjeta-libro" data-libro-id="6">
+          <h3>Versos de la tarde</h3>
+          <p><strong>ISBN:</strong> 978-987-738-201-8</p>
+          <p><strong>Editorial:</strong> Editorial Sudamericana</p>
+          <p><strong>Género:</strong> Poesía</p>
+          <p><strong>Autores:</strong> Ana Gómez</p>
+          <p><strong>Precio:</strong> $890.00</p>
+        </article>
+
+      </section>
+
+      <aside class="informacion-catalogo" aria-labelledby="titulo-informacion-catalogo">
+        <h3 id="titulo-informacion-catalogo">Cómo leer el catálogo</h3>
+        <ul>
+          <li>La búsqueda por título ignora mayúsculas y minúsculas, y busca coincidencias parciales.</li>
+          <li>Los precios se muestran en <em>pesos argentinos</em> con dos decimales.</li>
+          <li>Los libros sin género asignado figuran como «Sin clasificar».</li>
+        </ul>
+      </aside>
+    </section>
+
+    <!-- ==================== VISTA 2: LIBROS ==================== -->
+    <section id="vista-libros" class="vista" aria-labelledby="titulo-vista-libros">
+      <h2 id="titulo-vista-libros">Libros</h2>
+
+      <form id="form-alta-libro" action="#" method="post">
+        <fieldset>
+          <legend>Alta de libro</legend>
+          <p><small>Todos los campos son obligatorios, excepto el género.</small></p>
+
+          <label for="libro-titulo">Título</label>
+          <input type="text" id="libro-titulo" name="titulo" required autocomplete="off">
+
+          <label for="libro-isbn">ISBN</label>
+          <input type="text" id="libro-isbn" name="isbn" required autocomplete="off" placeholder="Ej.: 978-987-1234-56-7">
+
+          <label for="libro-precio">Precio</label>
+          <input type="number" id="libro-precio" name="precio" min="0.01" step="0.01" required>
+
+          <label for="libro-editorial">Editorial</label>
+          <select id="libro-editorial" name="editorial" required>
+            <option value="">Seleccione una editorial</option>
+            <option value="1">Planeta</option>
+            <option value="2">Editorial Sudamericana</option>
+          </select>
+
+          <!-- Caso límite: género opcional; «Sin clasificar» es la opción por defecto (value="") -->
+          <label for="libro-genero">Género</label>
+          <select id="libro-genero" name="genero">
+            <option value="" selected>«Sin clasificar»</option>
+            <option value="1">Fantasía</option>
+            <option value="2">Policial</option>
+            <option value="3">Ciencia</option>
+            <option value="4">Informática</option>
+            <option value="5">Poesía</option>
+          </select>
+
+          <label for="libro-autores">Autores</label>
+          <select id="libro-autores" name="autores" multiple required size="3" aria-describedby="ayuda-libro-autores">
+            <option value="1">Ana Gómez</option>
+            <option value="2">Carlos Ruiz</option>
+            <option value="3">María López</option>
+          </select>
+          <p class="ayuda"><small id="ayuda-libro-autores">Mantené presionado <kbd>Ctrl</kbd> (o <kbd>Cmd</kbd> en Mac) para seleccionar varios autores. Debe elegir al menos uno.</small></p>
+
+          <!-- Feedback del formulario: altas correctas, ISBN duplicado, datos inválidos -->
+          <p id="feedback-libros" class="mensaje" role="alert"></p>
+
+          <button type="submit">Registrar libro</button>
+        </fieldset>
+      </form>
+
+      <section class="tabla-contenedor" aria-labelledby="titulo-tabla-libros">
+        <h3 id="titulo-tabla-libros">Listado de libros</h3>
+
+        <p id="libros-vacio" class="estado-vacio" role="status" hidden>Todavía no hay libros cargados en el sistema.</p>
+
+        <table id="tabla-libros">
+          <thead>
+            <tr>
+              <th scope="col">Título</th>
+              <th scope="col">ISBN</th>
+              <th scope="col">Editorial</th>
+              <th scope="col">Género</th>
+              <th scope="col">Autores</th>
+              <th scope="col">Precio</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr data-libro-id="1">
+              <th scope="row">El umbral de la tormenta</th>
+              <td>978-84-01-00011-1</td>
+              <td>Planeta</td>
+              <td>Fantasía</td>
+              <td>Ana Gómez</td>
+              <td class="precio">$2500.00</td>
+            </tr>
+            <!-- Caso límite 1: libro sin género asignado -->
+            <tr data-libro-id="2">
+              <th scope="row">Crónica del fuego</th>
+              <td>978-987-566-001-7</td>
+              <td>Editorial Sudamericana</td>
+              <td>«Sin clasificar»</td>
+              <td>Carlos Ruiz</td>
+              <td class="precio">$1500.00</td>
+            </tr>
+            <!-- Caso límite 2: libro con dos autores -->
+            <tr data-libro-id="3">
+              <th scope="row">Sombras de Buenos Aires</th>
+              <td>978-987-1234-56-7</td>
+              <td>Planeta</td>
+              <td>Policial</td>
+              <td>Ana Gómez, Carlos Ruiz</td>
+              <td class="precio">$2000.00</td>
+            </tr>
+            <tr data-libro-id="4">
+              <th scope="row">Introducción a la lógica</th>
+              <td>978-84-415-3001-4</td>
+              <td>Editorial Sudamericana</td>
+              <td>Ciencia</td>
+              <td>María López</td>
+              <td class="precio">$3200.50</td>
+            </tr>
+            <tr data-libro-id="5">
+              <th scope="row">Algoritmos y estructuras de datos</th>
+              <td>978-950-07-2001-3</td>
+              <td>Planeta</td>
+              <td>Informática</td>
+              <td>María López, Carlos Ruiz</td>
+              <td class="precio">$4500.00</td>
+            </tr>
+            <tr data-libro-id="6">
+              <th scope="row">Versos de la tarde</th>
+              <td>978-987-738-201-8</td>
+              <td>Editorial Sudamericana</td>
+              <td>Poesía</td>
+              <td>Ana Gómez</td>
+              <td class="precio">$890.00</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+    </section>
+
+    <!-- ==================== VISTA 3: CLIENTES ==================== -->
+    <section id="vista-clientes" class="vista" aria-labelledby="titulo-vista-clientes">
+      <h2 id="titulo-vista-clientes">Clientes</h2>
+
+      <form id="form-alta-cliente" action="#" method="post">
+        <fieldset>
+          <legend>Alta de cliente</legend>
+          <p><small>Todos los campos son obligatorios.</small></p>
+
+          <label for="cliente-nombre">Nombre completo</label>
+          <input type="text" id="cliente-nombre" name="nombre" required autocomplete="name">
+
+          <label for="cliente-email">Email</label>
+          <input type="email" id="cliente-email" name="email" required autocomplete="email" placeholder="Ej.: nombre@correo.com">
+
+          <!-- Feedback del formulario: altas correctas, email repetido, formato inválido -->
+          <p id="feedback-clientes" class="mensaje" role="alert"></p>
+
+          <button type="submit">Registrar cliente</button>
+        </fieldset>
+      </form>
+
+      <section class="tabla-contenedor" aria-labelledby="titulo-tabla-clientes">
+        <h3 id="titulo-tabla-clientes">Listado de clientes</h3>
+
+        <p id="clientes-vacio" class="estado-vacio" role="status" hidden>Todavía no hay clientes registrados.</p>
+
+        <table id="tabla-clientes">
+          <thead>
+            <tr>
+              <th scope="col">Nombre completo</th>
+              <th scope="col">Email</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr data-cliente-id="1">
+              <th scope="row">Camila Fernández</th>
+              <td>camila.fernandez@correo.com</td>
+            </tr>
+            <tr data-cliente-id="2">
+              <th scope="row">Diego Ramírez</th>
+              <td>diego.ramirez@correo.com</td>
+            </tr>
+            <tr data-cliente-id="3">
+              <th scope="row">Valentina Sosa</th>
+              <td>valentina.sosa@correo.com</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+    </section>
+
+    <!-- ==================== VISTA 4: VENTAS ==================== -->
+    <section id="vista-ventas" class="vista" aria-labelledby="titulo-vista-ventas">
+      <h2 id="titulo-vista-ventas">Ventas</h2>
+
+      <form id="form-armar-venta" action="#" method="post">
+        <fieldset>
+          <legend>Datos de la venta</legend>
+          <label for="venta-cliente">Cliente</label>
+          <select id="venta-cliente" name="cliente" required>
+            <option value="">Seleccione un cliente</option>
+            <option value="1">Camila Fernández — camila.fernandez@correo.com</option>
+            <option value="2">Diego Ramírez — diego.ramirez@correo.com</option>
+            <option value="3">Valentina Sosa — valentina.sosa@correo.com</option>
+          </select>
+        </fieldset>
+
+        <fieldset>
+          <legend>Renglón a agregar</legend>
+          <label for="venta-libro">Libro</label>
+          <select id="venta-libro" name="libro" required>
+            <option value="">Seleccione un libro</option>
+            <option value="1">El umbral de la tormenta — $2500.00</option>
+            <option value="2">Crónica del fuego — $1500.00</option>
+            <option value="3">Sombras de Buenos Aires — $2000.00</option>
+            <option value="4">Introducción a la lógica — $3200.50</option>
+            <option value="5">Algoritmos y estructuras de datos — $4500.00</option>
+            <option value="6">Versos de la tarde — $890.00</option>
+          </select>
+
+          <label for="venta-cantidad">Cantidad</label>
+          <input type="number" id="venta-cantidad" name="cantidad" min="1" step="1" required>
+
+          <button type="button" id="btn-agregar-renglon">Agregar renglón a la venta</button>
+        </fieldset>
+
+        <!-- Feedback del formulario: cliente no seleccionado, libro repetido, venta confirmada -->
+        <p id="feedback-ventas" class="mensaje" role="alert"></p>
+
+        <button type="submit" id="btn-confirmar-venta">Confirmar venta</button>
+      </form>
+
+      <aside class="informacion-ventas" aria-labelledby="titulo-informacion-ventas">
+        <h3 id="titulo-informacion-ventas">Reglas de la venta</h3>
+        <ul>
+          <li>Debe seleccionar un cliente y al menos un renglón con cantidad entera mayor a cero.</li>
+          <li>No se permiten libros repetidos dentro de la misma venta.</li>
+          <li>Al confirmar, el precio unitario se copia al renglón: el historial <strong>nunca</strong> vuelve a leer el precio actual del catálogo.</li>
+        </ul>
+      </aside>
+
+      <section class="tabla-contenedor" aria-labelledby="titulo-tabla-renglones">
+        <h3 id="titulo-tabla-renglones">Renglones de la venta actual</h3>
+
+        <p id="venta-sin-renglones" class="estado-vacio" role="status" hidden>Todavía no se agregaron renglones a la venta actual.</p>
+
+        <table id="tabla-renglones">
+          <thead>
+            <tr>
+              <th scope="col">Libro</th>
+              <th scope="col">Cantidad</th>
+              <th scope="col">Precio unitario</th>
+              <th scope="col">Subtotal</th>
+              <th scope="col">Acción</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Caso límite 3: 2 unidades de un libro a $1500.00 -> subtotal $3000.00 -->
+            <tr data-renglon-id="1">
+              <th scope="row">Crónica del fuego</th>
+              <td>2</td>
+              <td class="precio">$1500.00</td>
+              <td class="precio">$3000.00</td>
+              <td><button type="button" class="btn-quitar" data-libro-id="2" aria-label="Quitar Crónica del fuego de la venta">Quitar</button></td>
+            </tr>
+            <!-- Caso límite 3: 1 unidad de otro libro a $2000.00 -> subtotal $2000.00 -->
+            <tr data-renglon-id="2">
+              <th scope="row">Sombras de Buenos Aires</th>
+              <td>1</td>
+              <td class="precio">$2000.00</td>
+              <td class="precio">$2000.00</td>
+              <td><button type="button" class="btn-quitar" data-libro-id="3" aria-label="Quitar Sombras de Buenos Aires de la venta">Quitar</button></td>
+            </tr>
+          </tbody>
+          <tfoot>
+            <!-- Caso límite 3: total exacto con dos decimales -->
+            <tr>
+              <th scope="row" colspan="4">Total general</th>
+              <td id="venta-total" class="precio">$5000.00</td>
+            </tr>
+          </tfoot>
+        </table>
+      </section>
+    </section>
+
+    <!-- ==================== VISTA 5: HISTORIAL ==================== -->
+    <section id="vista-historial" class="vista" aria-labelledby="titulo-vista-historial">
+      <h2 id="titulo-vista-historial">Historial</h2>
+
+      <section class="tabla-contenedor" aria-labelledby="titulo-tabla-historial">
+        <h3 id="titulo-tabla-historial">Ventas confirmadas</h3>
+
+        <p id="historial-vacio" class="estado-vacio" role="status" hidden>Todavía no hay ventas confirmadas.</p>
+
+        <table id="tabla-historial">
+          <thead>
+            <tr>
+              <th scope="col">ID</th>
+              <th scope="col">Fecha</th>
+              <th scope="col">Cliente</th>
+              <th scope="col">Total</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr data-venta-id="1">
+              <th scope="row">V-001</th>
+              <td><time datetime="2026-10-15">15/10/2026</time></td>
+              <td>Camila Fernández</td>
+              <td class="precio">$5000.00</td>
+            </tr>
+            <tr data-venta-id="2">
+              <th scope="row">V-002</th>
+              <td><time datetime="2026-10-16">16/10/2026</time></td>
+              <td>Diego Ramírez</td>
+              <td class="precio">$4500.00</td>
+            </tr>
+            <tr data-venta-id="3">
+              <th scope="row">V-003</th>
+              <td><time datetime="2026-10-17">17/10/2026</time></td>
+              <td>Valentina Sosa</td>
+              <td class="precio">$890.00</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section id="historial-detalle" class="tabla-contenedor" aria-labelledby="titulo-historial-detalle">
+        <h3 id="titulo-historial-detalle">Detalle de la venta V-001</h3>
+
+        <p id="historial-detalle-vacio" class="estado-vacio" role="status" hidden>Seleccione una venta del listado para ver el detalle de sus renglones.</p>
+
+        <dl class="datos-venta">
+          <dt>Cliente</dt>
+          <dd>Camila Fernández</dd>
+          <dt>Fecha</dt>
+          <dd><time datetime="2026-10-15">15/10/2026</time></dd>
+        </dl>
+
+        <table id="tabla-historial-detalle">
+          <thead>
+            <tr>
+              <th scope="col">Libro</th>
+              <th scope="col">Cantidad</th>
+              <th scope="col">Precio unitario</th>
+              <th scope="col">Subtotal</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Caso límite 3: el detalle conserva el precio histórico guardado al confirmar -->
+            <tr>
+              <th scope="row">Crónica del fuego</th>
+              <td>2</td>
+              <td class="precio">$1500.00</td>
+              <td class="precio">$3000.00</td>
+            </tr>
+            <tr>
+              <th scope="row">Sombras de Buenos Aires</th>
+              <td>1</td>
+              <td class="precio">$2000.00</td>
+              <td class="precio">$2000.00</td>
+            </tr>
+          </tbody>
+          <tfoot>
+            <tr>
+              <th scope="row" colspan="3">Total</th>
+              <td id="historial-total" class="precio">$5000.00</td>
+            </tr>
+          </tfoot>
+        </table>
+      </section>
+
+      <!-- Feedback del historial: anuncio del detalle seleccionado -->
+      <p id="feedback-historial" class="mensaje" role="status" aria-live="polite"></p>
+    </section>
+
+  </main>
+
+  <footer class="pie-sitio">
+    <p><strong>Librería El Estante</strong> — Trabajo práctico integrador de Programación III (UTN).</p>
+    <ul class="integrantes">
+      <li>Chiarello</li>
+      <li>Ontiveros</li>
+      <li>Oliveros</li>
+      <li>Rodríguez</li>
+    </ul>
+    <p><small>Presentación en <code>css/styles.css</code> y lógica en <code>js/app.js</code>. Sin librerías externas ni CDNs.</small></p>
+  </footer>
+</body>
+</html>
