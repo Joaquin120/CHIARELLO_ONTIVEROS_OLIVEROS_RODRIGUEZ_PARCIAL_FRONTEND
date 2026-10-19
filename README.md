@@ -291,13 +291,24 @@ Ejecución manual sobre `index.html` abierto en navegador. La columna *Resultado
 | 5 | Confirmar una venta válida: 2 unidades de un libro a $1500.00 y 1 unidad de otro a $2000.00. | Subtotales $3000.00 y $2000.00; total general $5000.00; el detalle de la venta queda conservado en el historial. | _Pendiente de ejecución_ | Pendiente |
 | 6 | Tras confirmar la venta del caso 5, cambiar **exclusivamente** el precio de catálogo guardado (en `localStorage` o en el código), en una copia de prueba del proyecto; recargar y consultar el historial. | El precio unitario, los subtotales y el total de esa venta **conservan** los valores confirmados; solo cambia el precio del catálogo. | _Pendiente de ejecución_ | Pendiente |
 | 7 | Recargar la página después de haber dado de libros/clientes de alta y de haber confirmado una venta. | Se recuperan todos los datos guardados sin duplicar los datos de ejemplo ni las ventas. | _Pendiente de ejecución_ | Pendiente |
-| 8 | Navegar por teclado (Tab / Shift+Tab / Enter) y verificar la vista a anchos de 320px y 1280px. | Foco visible en todos los controles, controles utilizables sin scroll horizontal de la página, y las tablas se desplazan horizontalmente dentro de su propio contenedor si lo necesitan. | _Pendiente de ejecución_ | Pendiente |
+| 8 | Navegar por teclado (Tab / Shift+Tab / Enter) y verificar la vista a anchos de 320px y 1280px. | Foco visible en todos los controles, controles utilizables sin scroll horizontal de la página, y las tablas se desplazan horizontalmente dentro de su propio contenedor si lo necesitan. | Foco visible verificado (anillo azul). Interfaz fluida en 320px sin scroll general, con overflow-x activo en tablas. En 1280px grid adaptado y centrado correctamente. Se validó contraste para daltonismo en errores. | **Aprobado** |
 
 **Convenciones de estado:**
 
 - **Pendiente:** caso aún no ejecutado.
 - **Aprobado:** resultado observado coincide con el esperado.
 - **Fallido:** no coincide; se documenta la diferencia en *Resultado Observado* y se abre el ajuste correspondiente.
+
+### 7.1 Detalle de Pruebas de Diseño y Accesibilidad (Ejecutadas por Santiago Ontivero)
+
+**A. Prueba de Adaptabilidad (Diseño Responsivo)**
+*   **Metodología:** Se utilizó el panel de herramientas para desarrolladores (F12) del navegador, activando la vista de dispositivos para simular resoluciones límite.
+*   **Resultado en 320px (Móvil):** Se verificó estrictamente la ausencia de scroll horizontal general en la página. Los contenedores de las tablas de datos (`.tabla-contenedor`) activan su propio scroll interno (`overflow-x: auto`), permitiendo visualizar el contenido desbordado sin romper la estructura general del sitio.
+*   **Resultado en 1280px (Escritorio):** Se comprobó que el contenedor principal respeta el límite de `max-width: 1280px` y se mantiene centrado en la pantalla, distribuyendo las tarjetas del catálogo de forma fluida mediante CSS Grid.
+
+**B. Prueba de Accesibilidad WAI y Contraste**
+*   **Navegación por Teclado:** Se interactuó con la interfaz utilizando únicamente la tecla `TAB`. Al hacer foco en elementos interactivos, se dispara la pseudo-clase `:focus-visible`, generando un contorno sólido de 3px con un color de alto contraste exclusivo para navegación por teclado.
+*   **Contraste para Daltonismo:** Se verificó forzando la clase `.error-text` en el inspector. El sistema no depende únicamente del color rojo para transmitir un error, sino que aplica automáticamente texto en negrita, subrayado y un ícono de alerta (⚠).
 
 ---
 
